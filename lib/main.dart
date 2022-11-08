@@ -2,11 +2,12 @@ import 'dart:io';
 
 import 'package:ecommerce/application/providers/product_list.dart';
 import 'package:ecommerce/domain/entity/cart_entity.dart';
-import 'package:ecommerce/domain/entity/order_entity.dart';
 import 'package:ecommerce/domain/entity/order_list.dart';
 import 'package:ecommerce/presentation/pages/cart_screen.dart';
 import 'package:ecommerce/presentation/pages/orders_screen.dart';
 import 'package:ecommerce/presentation/pages/product_detail_screen.dart';
+import 'package:ecommerce/presentation/pages/product_form_screen.dart';
+import 'package:ecommerce/presentation/pages/product_screen.dart';
 import 'package:ecommerce/presentation/pages/products_overview_sceen.dart';
 import 'package:ecommerce/routes.dart';
 import 'package:flutter/material.dart';
@@ -53,6 +54,8 @@ class MyApp extends StatelessWidget {
           AppRoutes.productDetailScreen: (ctx) => const ProductDetailScreen(),
           AppRoutes.cartScreen: (ctx) => const CartScreen(),
           AppRoutes.orderScreen: (ctx) => const OrdersScreen(),
+          AppRoutes.products: (ctx) => const ProductsScreen(),
+          AppRoutes.productsForm: (ctx) => const ProductFormScreen(),
         },
       ),
     );

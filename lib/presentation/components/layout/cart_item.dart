@@ -11,6 +11,29 @@ class CartItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dismissible(
+      confirmDismiss: (_) {
+        return showDialog(
+          context: context,
+          builder: ((context) => AlertDialog(
+                title: const Text('Tem certeza?'),
+                content: const Text('Quer remover o item do carrinho?'),
+                actions: [
+                  TextButton(
+                    child: const Text('NÃO'),
+                    onPressed: () {
+                      Navigator.of(context).pop(false);
+                    },
+                  ),
+                  TextButton(
+                    child: const Text('SIM'),
+                    onPressed: () {
+                      Navigator.of(context).pop(true);
+                    },
+                  ),
+                ],
+              )),
+        );
+      },
       onDismissed: (direction) {
         Provider.of<Cart>(
           context,

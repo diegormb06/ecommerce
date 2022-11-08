@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:math';
 
 import 'package:ecommerce/domain/entity/cart_item_entity.dart';
@@ -26,15 +27,15 @@ class Cart with ChangeNotifier {
 
   void addItem(Product product) {
     if (_items.containsKey(product.id)) {
-      _items.update(
-        product.id,
-        (previous) => CartItemEntity(
+      _items.update(product.id, (previous) {
+        print(previous.quantity);
+        return CartItemEntity(
             id: previous.id,
             productId: previous.productId,
             name: previous.name,
-            quantity: previous.quantity++,
-            price: previous.price),
-      );
+            quantity: previous.quantity + 1,
+            price: previous.price);
+      });
     } else {
       _items.putIfAbsent(
         product.id,
@@ -46,12 +47,29 @@ class Cart with ChangeNotifier {
             price: product.price),
       );
     }
-
     notifyListeners();
   }
 
   void removeItem(String productId) {
     _items.remove(productId);
+    notifyListeners();
+  }
+
+  void subtractItem(String productId) {
+    var currentItem = _items[productId];
+    if (_items.containsKey(productId) && currentItem!.quantity > 2) {
+      _items.update(
+        productId,
+        (previous) => CartItemEntity(
+            id: previous.id,
+            productId: previous.productId,
+            name: previous.name,
+            quantity: previous.quantity - 1,
+            price: previous.price),
+      );
+    } else {
+      _items.remove(productId);
+    }
     notifyListeners();
   }
 
