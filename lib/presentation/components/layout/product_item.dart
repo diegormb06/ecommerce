@@ -12,7 +12,7 @@ class ProductItem extends StatelessWidget {
         backgroundImage: NetworkImage(product.imageUrl),
       ),
       title: Text(product.title),
-      trailing: Container(
+      trailing: SizedBox(
         width: 100,
         child: Row(
           children: [

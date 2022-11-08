@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:math';
 
 import 'package:ecommerce/domain/entity/cart_item_entity.dart';
@@ -28,7 +27,6 @@ class Cart with ChangeNotifier {
   void addItem(Product product) {
     if (_items.containsKey(product.id)) {
       _items.update(product.id, (previous) {
-        print(previous.quantity);
         return CartItemEntity(
             id: previous.id,
             productId: previous.productId,
