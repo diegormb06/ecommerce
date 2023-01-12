@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:ecommerce/domain/entity/product_entity.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -15,9 +17,36 @@ class ProductsList with ChangeNotifier {
     return _items.length;
   }
 
+  void saveProduct(Map<String, Object> data) {
+    bool hasId = data["id"] != null;
+
+    final product = Product(
+      id: hasId ? data["id"] as String : Random().nextDouble().toString(),
+      title: data['title'] as String,
+      description: data['description'] as String,
+      price: data['price'] as double,
+      imageUrl: data['imageUrl'] as String,
+    );
+
+    if (hasId) {
+      updateProduct(product);
+    } else {
+      addProduct(product);
+    }
+  }
+
   void addProduct(Product product) {
     _items.add(product);
     notifyListeners();
+  }
+
+  void updateProduct(Product product) {
+    final index = _items.indexWhere((element) => element.id == product.id);
+
+    if (index >= 0) {
+      _items[index] = product;
+      notifyListeners();
+    }
   }
 }
 

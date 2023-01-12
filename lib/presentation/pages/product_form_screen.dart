@@ -1,7 +1,9 @@
 import 'dart:developer';
 import 'dart:math';
 
+import 'package:ecommerce/application/providers/product_list.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/entity/product_entity.dart';
 
@@ -27,6 +29,26 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
   }
 
   @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (formData.isEmpty) {
+      final arg = ModalRoute.of(context)?.settings.arguments;
+
+      if (arg != null) {
+        final product = arg as Product;
+        formData['id'] = product.id;
+        formData['title'] = product.title;
+        formData['price'] = product.price;
+        formData['description'] = product.description;
+        formData['imageUrl'] = product.imageUrl;
+
+        imageUrlController.text = product.imageUrl;
+      }
+    }
+  }
+
+  @override
   void dispose() {
     priceFocus.dispose();
     descriptionFocus.dispose();
@@ -47,20 +69,12 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
 
   void submitForm() {
     final isValid = formKey.currentState?.validate() ?? false;
-
     if (!isValid) return;
 
     formKey.currentState?.save();
 
-    final newProduct = Product(
-      id: Random().nextDouble().toString(),
-      title: formData['title'] as String,
-      description: formData['description'] as String,
-      price: formData['price'] as double,
-      imageUrl: formData['imageUrl'] as String,
-    );
-
-    inspect(newProduct);
+    Provider.of<ProductsList>(context, listen: false).saveProduct(formData);
+    Navigator.of(context).pop();
   }
 
   @override
@@ -82,6 +96,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
           child: ListView(
             children: [
               TextFormField(
+                  initialValue: formData['title'] as String?,
                   decoration: const InputDecoration(labelText: "Título"),
                   textInputAction: TextInputAction.next,
                   onFieldSubmitted: (value) => {
@@ -100,6 +115,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                     }
                   }),
               TextFormField(
+                initialValue: formData['price']?.toString(),
                 decoration: const InputDecoration(labelText: "Preço"),
                 textInputAction: TextInputAction.next,
                 focusNode: priceFocus,
@@ -119,6 +135,7 @@ class _ProductFormScreenState extends State<ProductFormScreen> {
                 },
               ),
               TextFormField(
+                initialValue: formData['description']?.toString(),
                 decoration: const InputDecoration(labelText: "Descrição"),
                 focusNode: descriptionFocus,
                 keyboardType: TextInputType.multiline,
