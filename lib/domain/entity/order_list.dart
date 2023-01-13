@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:ecommerce/domain/entity/order_entity.dart';
 import 'package:flutter/material.dart';
-
 import 'cart_entity.dart';
 
 class OrderList with ChangeNotifier {
